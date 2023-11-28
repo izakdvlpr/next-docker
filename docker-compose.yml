@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  web_development:
+    container_name: "web-development"
+    restart: always
+    build:
+      context: .
+      target: development
+      dockerfile: Dockerfile
+    command: npx next dev
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    profiles:
+      - development
+    networks:
+      - frontend
+  web_production:
+    container_name: "web-production"
+    restart: always
+    build:
+      context: .
+      target: production
+      dockerfile: Dockerfile
+    tty: true
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    profiles:
+      - production
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    driver: bridge
